@@ -611,18 +611,57 @@
         </div>
     </div>
 
-    <div id="private-window" class="hidden">
-        <div class="header">
-            <div onclick="closePrivateChat()" style="font-size: 28px; cursor:pointer; color: var(--neon);">←</div>
-            <span id="target-name" style="font-weight: bold; font-size: 18px;">@sohbet</span>
-            <div style="width: 28px;"></div>
-        </div>
-        <div id="priv-msgs" style="flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:12px;"></div>
-        <div style="display:flex; padding: 20px; gap: 12px; background: #080808; border-top: 1px solid #111;">
-            <input type="text" id="msg-input" placeholder="Bir şeyler yaz..." style="margin:0; flex:1; background: #111;">
-            <button id="btn-send" style="width: 55px; background: var(--neon); border:none; border-radius:15px; cursor: pointer; font-size: 20px;">🚀</button>
-        </div>
+    <div id="private-window" class="hidden" style="display: flex; flex-direction: column; height: 100vh; background: #000; position: fixed; top: 0; left: 0; width: 100%; z-index: 10000;">
+    
+    <div class="header" style="display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; background: #0a0a0a; border-bottom: 2px solid #8a2be2; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);">
+        <div onclick="closePrivateChat()" style="font-size: 28px; cursor:pointer; color: #8a2be2; text-shadow: 0 0 10px #8a2be2;">←</div>
+        <span id="target-name" style="font-weight: bold; font-size: 18px; color: white; text-transform: uppercase; letter-spacing: 1px;">@sohbet</span>
+        <div style="width: 28px;"></div>
     </div>
+
+    <div id="priv-msgs" style="flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:12px; background: radial-gradient(circle at center, #0d0d0d 0%, #000000 100%);">
+        </div>
+
+    <div style="display:flex; padding: 20px; gap: 12px; background: #0a0a0a; border-top: 2px solid #8a2be2; box-shadow: 0 -10px 30px rgba(138, 43, 226, 0.5); align-items: center;">
+        
+        <input type="text" id="msg-input" placeholder="Bir şeyler yaz..." style="
+            margin: 0; 
+            flex: 1; 
+            background: #151515; 
+            border: 2px solid #8a2be2; 
+            border-radius: 20px; 
+            padding: 12px 18px; 
+            color: white; 
+            font-size: 16px; 
+            outline: none; 
+            box-shadow: inset 0 0 8px rgba(138, 43, 226, 0.3), 0 0 10px rgba(138, 43, 226, 0.2);
+            transition: 0.3s all ease;
+        " onfocus="this.style.boxShadow='0 0 20px rgba(138, 43, 226, 0.7)'; this.style.borderColor='#bc13fe';"
+          onblur="this.style.boxShadow='0 0 10px rgba(138, 43, 226, 0.2)'; this.style.borderColor='#8a2be2';">
+
+        <button id="btn-send" style="
+            width: 60px; 
+            height: 50px;
+            background: linear-gradient(45deg, #8a2be2, #bc13fe); 
+            border: none; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            font-size: 22px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+            transition: 0.3s transform ease;
+        " onmousedown="this.style.transform='scale(0.9)'" onmouseup="this.style.transform='scale(1)'">
+            🚀
+        </button>
+    </div>
+
+    <style>
+        #priv-msgs::-webkit-scrollbar { width: 5px; }
+        #priv-msgs::-webkit-scrollbar-thumb { background: #8a2be2; border-radius: 10px; }
+    </style>
+</div>
 
     <div class="nav">
         <div class="nav-icon active" id="nav-feed" onclick="switchTab('feed', this)">🏠</div>
