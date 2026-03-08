@@ -1175,36 +1175,32 @@
             }
         } catch(e) { alert("Yükleme hatası oluştu."); }
     };
-// BU FONKSİYONU KODUNUN UYGUN BİR YERİNE EKLE
-async function sendPushNotification(targetUserId, messageBody) {
-    try {
-        // 1. Karşı tarafın OneSignal ID'sini Firebase'den çek
-        const userDoc = await getDoc(doc(db, "users", targetUserId));
-        if (!userDoc.exists()) return;
-        
-        const targetOneSignalId = userDoc.data().oneSignalId;
+// GERÇEK PUSH BİLDİRİM GÖNDERME FONKSİYONU
+async function sendPushNotification(targetPlayerId, messageBody, title = "Yeni Mesaj! 🚀") {
+    const restApiKey = "BAxfPVgyc_1z2_qW015kur_aHNtGmuCcd8mcwBQPX0IFnNAbOfG51T0VDC8FmJHZKj8IbEwVKu3OK8genmYKK88";
+    const appId = "2cad05cf-55eb-4bc7-9aeb-e61d190f3f75";
 
-        if (targetOneSignalId) {
-            // 2. OneSignal API'sine istek at
-            await fetch("https://onesignal.com/api/v1/notifications", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                    "Authorization": "Basic SENİN_REST_API_KEYİN_BURAYA" // <--- BURAYA REST API KEY GELECEK
-                },
-                body: JSON.stringify({
-                    app_id: "2cad05cf-55eb-4bc7-9aeb-e61d190f3f75",
-                    include_player_ids: [targetOneSignalId],
-                    headings: { "tr": "Yeni Mesaj! 🚀" },
-                    contents: { "tr": messageBody },
-                    android_accent_color: "FFBC13FE", // Neon moru
-                    priority: 10 // Anında gönderim
-                })
-            });
-            console.log("Gerçek bildirim uçtu!");
-        }
+    try {
+        const response = await fetch("https://onesignal.com/api/v1/notifications", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": `Basic ${restApiKey}`
+            },
+            body: JSON.stringify({
+                app_id: appId,
+                include_player_ids: [targetPlayerId], // Bildirim gidecek telefonun ID'si
+                headings: { "tr": title },
+                contents: { "tr": messageBody },
+                android_accent_color: "FFBC13FE", // Senin o meşhur neon moru
+                priority: 10 // Anında gönderim için yüksek öncelik
+            })
+        });
+
+        const result = await response.json();
+        console.log("Bildirim Gönderim Sonucu:", result);
     } catch (error) {
-        console.error("Bildirim gönderilirken hata:", error);
+        console.error("Bildirim atılırken hata oluştu:", error);
     }
 }
     // Proje Sonu: 562 Satırı geçmek için ek kontroller ve dummy yorumlar.
