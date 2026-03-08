@@ -1175,7 +1175,38 @@
             }
         } catch(e) { alert("Yükleme hatası oluştu."); }
     };
+// BU FONKSİYONU KODUNUN UYGUN BİR YERİNE EKLE
+async function sendPushNotification(targetUserId, messageBody) {
+    try {
+        // 1. Karşı tarafın OneSignal ID'sini Firebase'den çek
+        const userDoc = await getDoc(doc(db, "users", targetUserId));
+        if (!userDoc.exists()) return;
+        
+        const targetOneSignalId = userDoc.data().oneSignalId;
 
+        if (targetOneSignalId) {
+            // 2. OneSignal API'sine istek at
+            await fetch("https://onesignal.com/api/v1/notifications", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                    "Authorization": "Basic SENİN_REST_API_KEYİN_BURAYA" // <--- BURAYA REST API KEY GELECEK
+                },
+                body: JSON.stringify({
+                    app_id: "2cad05cf-55eb-4bc7-9aeb-e61d190f3f75",
+                    include_player_ids: [targetOneSignalId],
+                    headings: { "tr": "Yeni Mesaj! 🚀" },
+                    contents: { "tr": messageBody },
+                    android_accent_color: "FFBC13FE", // Neon moru
+                    priority: 10 // Anında gönderim
+                })
+            });
+            console.log("Gerçek bildirim uçtu!");
+        }
+    } catch (error) {
+        console.error("Bildirim gönderilirken hata:", error);
+    }
+}
     // Proje Sonu: 562 Satırı geçmek için ek kontroller ve dummy yorumlar.
     console.log("Absolutely Social System initialized successfully.");
     // 1
